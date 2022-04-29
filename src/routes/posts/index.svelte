@@ -1,0 +1,73 @@
+
+<script lang="ts">
+	import { website } from '$config/website.js';
+	import { Card } from '@sveltinio/widgets';
+	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+	export let resourceName: string;
+	export let items: Array<Sveltin.ContentEntry>;
+
+	const postsIndexPage: IWebPageMetadata = {
+		url: getPageUrl(resourceName, website),
+		title: website.name,
+		description: 'Here you can find the list of all available posts.',
+		keywords: (website.keywords) ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Website
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+</script>
+
+<PageMetaTags data={ postsIndexPage } />
+<JsonLdWebPage data={ postsIndexPage } />
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={resourceName}
+	currentTitle={ postsIndexPage.title}
+/>
+
+<section class="artifact-container">
+	<div class="content">
+		{#if items.length != 0}
+			<h1>{ToTitle(resourceName)}</h1>
+			<div class="cards">
+				{#each items as item}
+					<Card {item} />
+				{/each}
+			</div>
+		{:else}
+		<h2 class="message warning">
+			Nothing to show here! Create some content first and reload the page:
+			<span><pre><code class="text-default">sveltin new content posts/getting-started</code></pre></span>
+		</h2>
+		{/if}
+	</div>
+</section>
+
+<style>
+	.cards {
+		padding: 4px;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+		column-gap: 2rem;
+		row-gap: 2rem;
+	}
+
+	@media screen and (min-width: 1024px) {
+		.cards {
+			flex-direction: row;
+			justify-content: flex-start;
+		}
+	}
+</style>

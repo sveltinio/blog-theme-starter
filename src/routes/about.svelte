@@ -1,0 +1,50 @@
+
+<script lang="ts">
+	import { website } from '$config/website.js';
+	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+	const aboutPage: IWebPageMetadata = {
+		url: getPageUrl('about', website),
+		title: 'About',
+		description: website.seoDescription,
+		keywords: website.keywords ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+</script>
+
+<PageMetaTags data={ aboutPage } />
+<JsonLdWebPage data={ aboutPage } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ aboutPage.title} />
+
+<!-- Page markup-->
+<section class="page">
+	<div class="content">
+		<div class="centered">
+			<h1>This is the About page</h1>
+		</div>
+	</div>
+</section>
+
+<style>
+	.centered {
+		position: fixed;
+		top: 30%;
+		left: 40%;
+		margin-top: -50px;
+		margin-left: -100px;
+	}
+
+	.centered h1 {
+		font-size: 3rem;
+		line-height: 1;
+	}
+</style>

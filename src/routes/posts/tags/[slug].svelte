@@ -1,0 +1,24 @@
+<script lang="ts">
+	import { base } from '$app/paths';
+
+	export let slug: string;
+	export let metadata: Sveltin.ContentMetadata;
+	export let itemsCounter = metadata.items.length;
+</script>
+
+<div class="artifact-container">
+	<div class="content">
+		{#if metadata}
+			<h2>{slug}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
+			<ul>
+				{#each metadata.items as item}
+					<li><a sveltekit:prefetch href="{base}/posts/{item.slug}">{item.title}</a></li>
+				{/each}
+			</ul>
+		{:else}
+			<h2 class="message warning">
+				Please, check all your content ensuring the YAML frontmatter contains "<i>Category</i>".
+			</h2>
+		{/if}
+	</div>
+</div>
